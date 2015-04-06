@@ -30,17 +30,17 @@ public class AES extends org.thotheolh.sc.mailcard.cipher.algo.Cipher {
         this.padMode = padMode;
 
         if (cipherMode == CipherModeType.AES_CBC_NOPAD && padMode == SymmetricPadType.NO_PAD) {
-            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_CBC_NOPAD, true);
+            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_CBC_NOPAD, false);
         } else if (cipherMode == CipherModeType.AES_ECB_NOPAD && padMode == SymmetricPadType.NO_PAD) {
-            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, true);
+            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
         } else if (cipherMode == CipherModeType.AES_CBC_NOPAD && padMode == SymmetricPadType.PKCS5) {
-            cipher = Cipher.getInstance(Cipher.ALG_AES_CBC_PKCS5, true);
+            cipher = Cipher.getInstance(Cipher.ALG_AES_CBC_PKCS5, false);
         } else if (cipherMode == CipherModeType.AES_ECB_NOPAD && padMode == SymmetricPadType.PKCS5) {
-            cipher = Cipher.getInstance(Cipher.ALG_AES_ECB_PKCS5, true);
+            cipher = Cipher.getInstance(Cipher.ALG_AES_ECB_PKCS5, false);
         } else if (cipherMode == CipherModeType.AES_CBC_NOPAD && padMode == SymmetricPadType.PKCS7) {
-            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_CBC_NOPAD, true);
+            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_CBC_NOPAD, false);
         } else if (cipherMode == CipherModeType.AES_ECB_NOPAD && padMode == SymmetricPadType.PKCS7) {
-            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, true);
+            cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
         } else {
             cipher = null;
         }

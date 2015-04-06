@@ -314,7 +314,7 @@ run   - Builds and deploys the application and starts the browser.
         </copy>
     </target>
     <target name="compile-with-preprocessor" depends="-init" if="use.preprocessor">
-        <javac destdir="${build.classes.dir}" source="${javac.source}" target="${javac.target}" nowarn="${javac.deprecation}" debug="${javac.debug}" optimize="no" bootclasspath="${javacard.classic.bootclasspath}" includeAntRuntime="no">
+        <javac destdir="${build.classes.dir}" source="${javac.source}" target="${javac.target}" nowarn="${javac.deprecation}" debug="${javac.debug}" optimize="no" bootclasspath="${javacard.bootclasspath}" includeAntRuntime="no">
             <src path="${src.dir}"/>
             <classpath id="compile.path"/>
             <compilerarg line="-processor com.oracle.javacard.stringproc.StringConstantsProcessor"/>
