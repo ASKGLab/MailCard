@@ -54,12 +54,12 @@ public class AES extends org.thotheolh.sc.mailcard.cipher.algo.Cipher {
         }
     }
 
-    public void update(byte[] inputData, byte[] outputData) {
-        cipher.update(handleDataPadding(inputData, padMode), (short) 0, (short) inputData.length, outputData, (short) 0);
+    public void update(byte[][] inputData, byte[] outputData) {
+        cipher.update(handleDataPadding(inputData[0], padMode), (short) 0, (short) inputData[0].length, outputData, (short) 0);
     }
 
-    public void doFinal(byte[] inputData, byte[] outputData) {
-        cipher.doFinal(handleDataPadding(inputData, padMode), (short) 0, (short) inputData.length, outputData, (short) 0);
+    public void doFinal(byte[][] inputData, byte[] outputData) {
+        cipher.doFinal(handleDataPadding(inputData[0], padMode), (short) 0, (short) inputData[0].length, outputData, (short) 0);
     }
 
     public byte[] handleDataPadding(byte[] data, short padMode) {

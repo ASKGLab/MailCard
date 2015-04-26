@@ -81,27 +81,45 @@ public class RSA extends org.thotheolh.sc.mailcard.cipher.algo.Cipher {
         }
     }
 
-    public void update(byte[] inputData, byte[] outputData) {
-        signer.update(inputData, (short) 0, (short) inputData.length);
+    public void update(byte[][] inputData, byte[] outputData) {
+        signer.update(inputData[0], (short) 0, (short) inputData[0].length);
     }
 
-    public void doFinal(byte[] inputData, byte[] outputData) {
+    public void doFinal(byte[][] inputData, byte[] outputData) {
         if (opMode == OperationType.DO_VERIFY) {
-            // signer.verify();
+            byte[] contentData = inputData[0];
+            byte[] signData = inputData[1];
+            if (signer.verify(contentData, (short) 0, (short) contentData.length, signData, (short) 0, (short) signData.length)) {
+                outputData = new byte[]{(byte) 0x00};
+            } else {
+                outputData = new byte[]{(byte) 0xFF};
+            }
         } else if (opMode == OperationType.DO_SIGN) {
-            signer.sign(inputData, (short) 0, (short) inputData.length, outputData, (short) 0);
+            signer.sign(inputData[0], (short) 0, (short) inputData.length, outputData, (short) 0);
         } else if (opMode == OperationType.DO_DECRYPT) {
 
         } else if (opMode == OperationType.DO_DECRYPT_VERIFY) {
+            byte[] contentData = inputData[0];
+            byte[] signData = inputData[1];
+            if (signer.verify(contentData, (short) 0, (short) contentData.length, signData, (short) 0, (short) signData.length)) {
+                // Begin Decrypt
 
+            } else {
+                // Do Not Decrypt Failed Data and return Error
+                outputData = new byte[]{(byte) 0xFF};
+            }
         } else if (opMode == OperationType.DO_ENCRYPT) {
-
+            cipher.doFinal(inputData[0], (short) 0, (short) inputData.length, outputData, (short) 0);
         } else if (opMode == OperationType.DO_ENCRYPT_SIGN) {
+            // Encrypt first
 
+            // Then Sign.
+            signer.sign(inputData[0], (short) 0, (short) inputData.length, outputData, (short) 0);
         }
     }
 
     public byte[] handleDataPadding(byte[] inputData, short padMode) {
         return null;
     }
+    
 }

@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.thotheolh.sc.mailcard.cipher.algo.mode;
+package org.thotheolh.sc.mailcard.comm;
 
 /**
  *
- * @author gerald
+ * @author Thotheolh
  */
-public class CBC extends Mode {
-
-    public void processBlock(byte[] block, byte[] iv) {
-
-    }
+public class Server {
+    
 }

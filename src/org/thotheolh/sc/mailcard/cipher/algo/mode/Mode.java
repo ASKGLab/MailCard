@@ -7,11 +7,10 @@ package org.thotheolh.sc.mailcard.cipher.algo.mode;
 
 /**
  *
- * @author gerald
+ * @author Thotheolh
  */
-public class CBC extends Mode {
-
-    public void processBlock(byte[] block, byte[] iv) {
-
-    }
+public abstract class Mode {
+    
+    public abstract void processBlock(byte[] block, byte[] params);
+    
 }
