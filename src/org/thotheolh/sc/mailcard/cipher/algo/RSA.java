@@ -81,45 +81,51 @@ public class RSA extends org.thotheolh.sc.mailcard.cipher.algo.Cipher {
         }
     }
 
-    public void update(byte[][] inputData, byte[] outputData) {
+    public void update(byte[][] inputData, short encFrom, short encLen, byte[] outputData) {
         signer.update(inputData[0], (short) 0, (short) inputData[0].length);
     }
 
-    public void doFinal(byte[][] inputData, byte[] outputData) {
+    public void doFinal(byte[][] inputData, short encFrom, short encLen, Object outputData) {
+        byte[] contentData = inputData[0];
+        byte[] signData = inputData[1];
         if (opMode == OperationType.DO_VERIFY) {
-            byte[] contentData = inputData[0];
-            byte[] signData = inputData[1];
             if (signer.verify(contentData, (short) 0, (short) contentData.length, signData, (short) 0, (short) signData.length)) {
                 outputData = new byte[]{(byte) 0x00};
             } else {
                 outputData = new byte[]{(byte) 0xFF};
             }
         } else if (opMode == OperationType.DO_SIGN) {
-            signer.sign(inputData[0], (short) 0, (short) inputData.length, outputData, (short) 0);
+            signer.sign(contentData, (short) 0, (short) inputData.length, (byte[]) outputData, (short) 0);
         } else if (opMode == OperationType.DO_DECRYPT) {
-
+            cipher.doFinal(inputData[0], encFrom, encLen, (byte[]) outputData, (short) 0);
         } else if (opMode == OperationType.DO_DECRYPT_VERIFY) {
-            byte[] contentData = inputData[0];
-            byte[] signData = inputData[1];
             if (signer.verify(contentData, (short) 0, (short) contentData.length, signData, (short) 0, (short) signData.length)) {
+                
                 // Begin Decrypt
-
+                cipher.doFinal(contentData, encFrom, encLen, (byte[]) outputData, (short) 0);
             } else {
+                
                 // Do Not Decrypt Failed Data and return Error
                 outputData = new byte[]{(byte) 0xFF};
             }
         } else if (opMode == OperationType.DO_ENCRYPT) {
-            cipher.doFinal(inputData[0], (short) 0, (short) inputData.length, outputData, (short) 0);
+            cipher.doFinal(contentData, (short) 0, (short) inputData.length, (byte[]) outputData, (short) 0);
         } else if (opMode == OperationType.DO_ENCRYPT_SIGN) {
+            byte[] procEncData = {};
+            byte[] procSignData = {};
             // Encrypt first
+            cipher.doFinal(contentData, encFrom, encLen, procEncData, (short) 0);
 
             // Then Sign.
-            signer.sign(inputData[0], (short) 0, (short) inputData.length, outputData, (short) 0);
+            signer.sign(procEncData, (short) 0, (short) inputData.length, procSignData, (short) 0);
+
+            // Combine the signed and encrypted data
+            outputData = new byte[][]{procEncData, procSignData};
         }
     }
 
     public byte[] handleDataPadding(byte[] inputData, short padMode) {
         return null;
     }
-    
+
 }
