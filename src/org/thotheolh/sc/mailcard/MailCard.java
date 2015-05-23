@@ -7,10 +7,14 @@ package org.thotheolh.sc.mailcard;
 
 import javacard.framework.*;
 import javacard.security.AESKey;
+import javacard.security.CryptoException;
 import javacard.security.KeyBuilder;
 import javacard.security.KeyPair;
+import javacard.security.MessageDigest;
 import javacard.security.RSAPrivateKey;
 import javacard.security.RSAPublicKey;
+import javacard.security.Signature;
+import javacardx.crypto.Cipher;
 
 /**
  *
@@ -47,7 +51,11 @@ public class MailCard extends Applet {
      * @param bLength the length in bytes of the parameter data in bArray
      */
     public static void install(byte[] bArray, short bOffset, byte bLength) {
-        new MailCard(bArray, bOffset, bLength);
+        if (cardCheck()) {
+            new MailCard(bArray, bOffset, bLength);
+        } else {
+            // Return error of installation due to failed card check.
+        }
     }
 
     /**
@@ -80,6 +88,35 @@ public class MailCard extends Applet {
         } else if (dPin.check(pinData, (short) 0, MAX_PIN_SIZE)) {
             die();
         }
+    }
+
+    /**
+     * Card check to check environment before installing
+     */
+    private static boolean cardCheck() {
+        boolean ciphersSupported = true;
+
+        // Checks supporting cipher list for usability.
+        try {
+            Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_CBC_NOPAD, false);
+            Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
+            Cipher.getInstance(javacardx.crypto.Cipher.ALG_RSA_NOPAD, false);
+            Cipher.getInstance(javacardx.crypto.Cipher.ALG_RSA_PKCS1, false);
+            Cipher.getInstance(javacardx.crypto.Cipher.ALG_RSA_PKCS1_OAEP, false);
+            Signature.getInstance(Signature.ALG_RSA_SHA_PKCS1, false);
+            Signature.getInstance(Signature.ALG_RSA_SHA_256_PKCS1, false);
+            Signature.getInstance(Signature.ALG_HMAC_SHA1, false);
+            Signature.getInstance(Signature.ALG_HMAC_SHA_256, false);
+            Signature.getInstance(Signature.ALG_HMAC_SHA_384, false);
+            MessageDigest.getInstance(MessageDigest.ALG_SHA, false);
+            MessageDigest.getInstance(MessageDigest.ALG_SHA_256, false);
+            MessageDigest.getInstance(MessageDigest.ALG_SHA_384, false);
+        } catch (CryptoException e) {
+            if (e.getReason() == CryptoException.NO_SUCH_ALGORITHM) {
+                ciphersSupported = false;
+            }
+        }
+        return ciphersSupported;
     }
 
     /**
@@ -124,7 +161,8 @@ public class MailCard extends Applet {
     }
 
     /**
-     * Uses masterKey to encrypt mailPassword to protect from physical offline probe.
+     * Uses masterKey to encrypt mailPassword to protect from physical offline
+     * probe.
      */
     public void encryptMailPassword() {
     }

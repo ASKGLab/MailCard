@@ -5,7 +5,7 @@
  */
 package org.thotheolh.sc.mailcard.cipher.algo;
 
-import org.thotheolh.sc.mailcard.KeyHandle;
+import org.thotheolh.sc.km.world.KeyHandle;
 import javacard.security.Key;
 
 /**

@@ -5,7 +5,8 @@
  */
 package org.thotheolh.sc.mailcard.cipher.algo;
 
-import org.thotheolh.sc.mailcard.KeyHandle;
+import javacard.security.CryptoException;
+import org.thotheolh.sc.km.world.KeyHandle;
 import org.thotheolh.sc.mailcard.cipher.algo.pad.PKCS7;
 import org.thotheolh.sc.mailcard.type.CipherModeType;
 import org.thotheolh.sc.mailcard.type.OperationType;
@@ -26,7 +27,6 @@ public class AES extends org.thotheolh.sc.mailcard.cipher.algo.Cipher {
     }
 
     public void init(KeyHandle keyHandle, short opMode, short cipherMode, short padMode) {
-
         this.padMode = padMode;
 
         if (cipherMode == CipherModeType.AES_CBC_NOPAD && padMode == SymmetricPadType.NO_PAD) {

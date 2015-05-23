@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.thotheolh.sc.mailcard;
+package org.thotheolh.sc.km.world;
 
 /**
  *

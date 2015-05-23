@@ -1,7 +1,7 @@
 /*
  * Converts Keys and regulates Key Import/Export.
  */
-package org.thotheolh.sc.mailcard;
+package org.thotheolh.sc.km.world;
 
 /**
  *

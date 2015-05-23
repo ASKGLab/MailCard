@@ -5,8 +5,9 @@
  */
 package org.thotheolh.sc.mailcard.cipher.algo;
 
+import javacard.security.CryptoException;
 import javacard.security.Signature;
-import org.thotheolh.sc.mailcard.KeyHandle;
+import org.thotheolh.sc.km.world.KeyHandle;
 import org.thotheolh.sc.mailcard.type.CipherModeType;
 import org.thotheolh.sc.mailcard.type.OperationType;
 import javacardx.crypto.Cipher;
@@ -26,7 +27,6 @@ public class RSA extends org.thotheolh.sc.mailcard.cipher.algo.Cipher {
     }
 
     public void init(KeyHandle keyHandle, short opMode, short cipherMode, short padMode) {
-
         this.padMode = padMode;
         this.opMode = opMode;
 
@@ -100,11 +100,11 @@ public class RSA extends org.thotheolh.sc.mailcard.cipher.algo.Cipher {
             cipher.doFinal(inputData[0], encFrom, encLen, (byte[]) outputData, (short) 0);
         } else if (opMode == OperationType.DO_DECRYPT_VERIFY) {
             if (signer.verify(contentData, (short) 0, (short) contentData.length, signData, (short) 0, (short) signData.length)) {
-                
+
                 // Begin Decrypt
                 cipher.doFinal(contentData, encFrom, encLen, (byte[]) outputData, (short) 0);
             } else {
-                
+
                 // Do Not Decrypt Failed Data and return Error
                 outputData = new byte[]{(byte) 0xFF};
             }
