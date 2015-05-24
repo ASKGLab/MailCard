@@ -8,6 +8,7 @@ package org.thotheolh.sc.mailcard;
 import javacard.framework.*;
 import javacard.security.AESKey;
 import javacard.security.CryptoException;
+import javacard.security.HMACKey;
 import javacard.security.KeyBuilder;
 import javacard.security.KeyPair;
 import javacard.security.MessageDigest;
@@ -15,6 +16,7 @@ import javacard.security.RSAPrivateKey;
 import javacard.security.RSAPublicKey;
 import javacard.security.Signature;
 import javacardx.crypto.Cipher;
+import org.thotheolh.sc.mailcard.sec.otp.HOTPEngine;
 
 /**
  *
@@ -31,7 +33,7 @@ public class MailCard extends Applet {
     final private RSAPublicKey mailServerPubKey;
     final private KeyPair pgpKeyPair;
     final private AESKey masterKey;
-    final private AESKey otpKey;
+    final private HMACKey otpKey;
     final private AESKey otpSyncKey;
     final private byte[] BLANK_PIN_BYTES = new byte[]{(byte) 0x00, (byte) 0x00,
         (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
@@ -42,6 +44,7 @@ public class MailCard extends Applet {
     private byte[] smtpPort;
     private byte[] mailPassword;
     private boolean isPasswordEncrypted = false;
+    private int otpCtr = 0;
 
     /**
      * Installs this applet.
@@ -70,24 +73,48 @@ public class MailCard extends Applet {
         pgpKeyPair = new KeyPair(KeyPair.ALG_RSA, (short) pgpPubKey.getSize());
         mailServerPubKey = (RSAPublicKey) KeyBuilder.buildKey(KeyBuilder.TYPE_RSA_PUBLIC, KeyBuilder.LENGTH_RSA_2048, true);
         masterKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_256, true);
-        otpKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_256, true);
+        otpKey = (HMACKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_256, true);
         otpSyncKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_256, true);
         register();
     }
 
     /**
-     * Card Login. Beware of the dangers of the ANGRY PRIME !
+     * Card Login.
      *
      * @param pin
      * @param loginDataBuffer
      * @throws ISOException
      */
-    public void login(OwnerPIN pin, byte[] pinData) throws ISOException {
-        if (pin.check(pinData, (short) 0, MAX_PIN_SIZE)) {
+    public void login(OwnerPIN pin, byte[] pinData, byte[] otpBytes) throws ISOException {
+        boolean pinOK = false;
+        boolean otpOK = false;
 
-        } else if (dPin.check(pinData, (short) 0, MAX_PIN_SIZE)) {
+        // Check PIN. Checki dPin first to prevent smartcard power off to avoid dPin checking.
+        if (dPin.check(pinData, (short) 0, MAX_PIN_SIZE)) {
             die();
+        } else if (pin.check(pinData, (short) 0, MAX_PIN_SIZE)) {
+            pinOK = true;
+        } else {
+            pinOK = false;
         }
+
+        // Check OTP
+        if (checkOTP(otpBytes)) {
+            otpOK = true;
+        } else {
+            otpOK = false;
+        }
+
+        // Finalize login result
+        if (pinOK && otpOK) {
+            // Accept login.
+        } else {
+            // Reject login.
+        }
+    }
+
+    public boolean checkOTP(byte[] otpBytes) {
+        return HOTPEngine.checkOTP(otpKey, otpCtr, otpBytes);
     }
 
     /**

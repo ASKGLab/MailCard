@@ -22,7 +22,7 @@ public class HOTPEngine {
      * @param usageCtr
      * @return 
      */
-    private byte[] generateOTP(Key hotpKey, int usageCtr) {
+    private static byte[] generateOTP(Key hotpKey, int usageCtr) {
         byte[] result = null;
         byte[] text = new byte[8];
 
@@ -62,7 +62,7 @@ public class HOTPEngine {
      * @param otpBytes
      * @return 
      */
-    public boolean checkOTP(Key hotpKey, short usageCtr, byte[] otpBytes) {
+    public static boolean checkOTP(Key hotpKey, int usageCtr, byte[] otpBytes) {
         byte[] currOtpBytes = generateOTP(hotpKey, usageCtr);
         byte a = Util.arrayCompare(otpBytes, (short) 0, currOtpBytes, (short) 0, (short) currOtpBytes.length);
         if (a == (byte) 0) {
