@@ -3,9 +3,9 @@ An attempt to host a tiny email client securely inside a JavaCard applet.
 
 ### MailCard Features
 * Securely store email password inside the smartcard environment (AES-256 encrypted as well).
-* Limited TLS features that are strictly selected (non cipher suite downgrades allowed).
+* Limited TLS features that are strictly selected (no cipher suite downgrades allowed).
 * Securely store 1 set of PGP keypair inside smartcard environment for email encryption and signing.
-* OTP 2FA to authorize smartcard to send/receive emails.
+* HOTP 2FA to authorize smartcard to send/receive emails.
 * Self-Destruct features include 1x Self-Destruct PIN (specified at profile initialization) and self-destruct command.
 * No-Export feature on the entire email profile preventing leaking of passwords, PINs and cryptographic keys outside of the card.
 * Card PIN lockdown and self-destruct of profile data upon too many wrong PIN tries.
@@ -23,16 +23,21 @@ The HOTP-based OTP setup is used at the moment a user were to intent the MailCar
 * TLS_DHE_RSA_WITH_AES_128_CBC_SHA256
 * TLS_DHE_RSA_WITH_AES_256_CBC_SHA256
 * TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+* TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 
-Note: Other more preferrable cipher suites like the AES_256_GCM_SHA384 are not supported due to most smartcards only capable of SHA1 and SHA256 algorithms.
+Note: The usage of cryptographic algorithms are heavily dependent on the capability of the card's crypto-processor. MailCard would run a check and adjust itself during applet installation to use the most suitable cipher suites the card's crypto-processor can handle. Diffie-Hellman Ephemeral key sizes are set to 1024 or 2048 bit prime with preference for 2048 bit primes if the server has it enabled.
 
 ### Generic Ciphers
 * RSA (Hardware Support)
 * AES (Hardware Support)
-* SHA1/256 (Hardware Support)
+* SHA1/256/384 (Hardware Support)
+* DHE1024/2048 (Software Support)
 
 ### Cipher Modes
 * RSA PKCS1 (Hardware Support)
 * RSA OAEP (Hardware Support)
 * CBC (Hardware & Software Support)
-* GCM (SOftware Support)
+* GCM (Software Support)
+
+### OTP Mode
+* RFC4226 HMAC-based OTP (only supports 6 digit code)
