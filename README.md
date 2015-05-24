@@ -25,7 +25,7 @@ The HOTP-based OTP setup is used at the moment a user were to intent the MailCar
 * TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
 * TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
 
-Note: The usage of cryptographic algorithms are heavily dependent on the capability of the card's crypto-processor. MailCard would run a check and adjust itself during applet installation to use the most suitable cipher suites the card's crypto-processor can handle. Diffie-Hellman Ephemeral key sizes are set to 1024 or 2048 bit prime with preference for 2048 bit primes if the server has it enabled.
+Note: The usage of cryptographic algorithms are heavily dependent on the capability of the card's crypto-processor. MailCard would run a check and adjust itself during applet installation to use the most suitable cipher suites the card's crypto-processor can handle. Diffie-Hellman Ephemeral prime sizes are set to 1024 or 2048 bit prime with preference for 2048 bit primes if the server has it enabled.
 
 ### Generic Ciphers
 * RSA (Hardware Support)
