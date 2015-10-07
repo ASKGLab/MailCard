@@ -18,12 +18,12 @@ A MailCard user would need to create a profile (1 set of PGP keypair either impo
 The HOTP-based OTP setup is used at the moment a user were to intent the MailCard to send an email and the OTP option is enabled so that even if the card's PIN were to be stolen by a keylogger, a OTP code is required to authorize the MailCard applet to send an email. The OTP application can be installed onto a smartphone or even a separate OTP display token to prevent a possibly infected frontend computer from predicting the OTP codes.
 
 ### TLS Cipher Suites
-* TLS_DHE_RSA_WITH_AES_128_CBC_SHA
-* TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-* TLS_DHE_RSA_WITH_AES_128_CBC_SHA256
-* TLS_DHE_RSA_WITH_AES_256_CBC_SHA256
-* TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
-* TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+* TLS_DHE_RSA_WITH_AES_128_CBC_SHA    (Definite)
+* TLS_DHE_RSA_WITH_AES_256_CBC_SHA    (Definite)
+* TLS_DHE_RSA_WITH_AES_128_CBC_SHA256 (Definite)
+* TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 (Definite)
+* TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 (Indefinite)
+* TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 (Indefinite)
 
 Note: The usage of cryptographic algorithms are heavily dependent on the capability of the card's crypto-processor. MailCard would run a check and adjust itself during applet installation to use the most suitable cipher suites the card's crypto-processor can handle. Diffie-Hellman Ephemeral prime sizes are set to 1024 or 2048 bit prime with preference for 2048 bit primes if the server has it enabled.
 
