@@ -10,16 +10,27 @@ MailCard will not be using the GP's standardize SCP Secure Channel Protocol but 
 
 ### Schannel FLow
 1.) Host gets to set P and G parameters anytime in the initial stage of the Schannel negotiation in any order.
+
 2.) Card response with SW:9000(OK).
+
 3.) Host may simply not set P and G to default to the default P and G settings. This step is irreversible.
+
 4.) Once Host decides to move beyond setting P and G parameters, Host calls init() on Schannel for the card to generate it's own private key and calculate Y = G ^ Secret_Key Mod P.
+
 5.) Card will return SW:9000(OK) when it manages to generate it's private key and Y value.
+
 6.) The Host can calculate it's own Y values before or while calling init() on the Schannel.
+
 7.) Host will retrieve Card's Y value first before sending Card the Host's Y value. The Y values are the so-called "public key". 
+
 8.) If the Host accepts the Card's Y value, it will send Host's Y value to Card as a sign of acceptable. This step is irreversible as well.
+
 9.) Card will return SW:9000(OK) when it receives an authentic Host's Y value.
+
 10.) Host calls final() on Schannel which causes the Card to generate the session secret (S) which will derive the session AES and HMAC keys.
+
 11.) Host will also generate it's own session secret (S) and derive it's own session AES and HMAC keys before or while calling final() on Schannel.
+
 12.) During step 9.), Host may send a 16 bit counter that has been encrypted and signed to the Card as a challenge and the Card unwraps and verifies thew 16 bit counter and increments the counter by 1 before wrapping and signing a response to proof a successful connection.
 
 ### Design Decisions
