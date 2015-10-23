@@ -41,12 +41,14 @@ Answer: JavaCard does not support GCM mode and to write your own GCM codes you r
 Answer: Not directly supported on JavaCard and resource constrains on the card. Remember, this is a security embeddded project after all, not a desktop project with tonnes of space to spare.
 
 3.) Using non-ECC Diffie-Hellman (e.g. ECDH types) on the smart card would meant re-inventing the wheel ?
-Answer: Not true. The RSA modexp function (encrypt) is rather handy as both RSA and traditional DH uses modexp and re-usable.
+Answer: Not true. The RSA modexp function (encrypt) is rather handy as both RSA and traditional DH uses modexp and re-usable. The recent progress on cryptanalytic efforts ECC is also a factor of worry and in August, NSA published a statement discouraging move to NIST Suite B if there were no efforts yet. The current state of ECC cryptography is worrying and MailCard will persist to use traditional RSA and DH instead of ECC. ECC will NOT be supported. Please refer to link below for more information.
 
 4.) Why not use ECDH stuff ?
-Answer: Not all cards support ECC crypto although more cards are coming to the market equipped with ECC crypto but it is best to prepare for a card not capable of ECC crypto.
+Answer: Not all cards support ECC crypto although more cards are coming to the market equipped with ECC crypto but it is best to prepare for a card not capable of ECC crypto. Please read point 3 above.
 
 ### Cryptographic Default Values
 * DH Group 14 as per RFC-3526 with generator 2. Generator value of 5 is supported but must be explicitly set by Host.
 
-
+### External Links
+* http://eprint.iacr.org/2015/1018.pdf
+* http://blog.cryptographyengineering.com/2015/10/a-riddle-wrapped-in-curve.html
