@@ -31,8 +31,6 @@ MailCard will not be using the GP's standardize SCP Secure Channel Protocol but 
 
 11.) Host will also generate it's own session secret (S) and derive it's own session AES and HMAC keys before or while calling final() on Schannel.
 
-12.) During step 9.), Host may send a 16 bit counter that has been encrypted and signed to the Card as a challenge and the Card unwraps and verifies thew 16 bit counter and increments the counter by 1 before wrapping and signing a response to proof a successful connection.
-
 ### Design Decisions
 1.) Why use AES-CBC instead of sopmething supposedly stronger like AES-GCM ?
 Answer: JavaCard does not support GCM mode and to write your own GCM codes you risk consuming precious space on the smart card.
